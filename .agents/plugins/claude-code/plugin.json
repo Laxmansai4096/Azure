@@ -1,0 +1,7 @@
+{
+  "name": "claude-code",
+  "version": "1.0.0",
+  "description": "Claude Code Dual-Agent Integration for Antigravity IDE",
+  "author": "Antigravity Pair Programmer",
+  "entry": "rules/dual_agent_workflow.md"
+}

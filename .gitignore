@@ -1,0 +1,10 @@
+# Environments and secrets
+.env
+*.local
+*.log
+
+# Caches
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
