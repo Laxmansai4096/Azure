@@ -1,0 +1,185 @@
+================================================================================
+          AZURE AI SERVICES & EXPLORE-AI-HUB MASTER GUIDE
+   (Comprehensive Reference for Forward Deployed & AI Engineers)
+================================================================================
+Target Resource : explore-ai-hub
+Resource Group  : rg-azure-explorer
+Resource Kind   : AIServices (Multi-Service Cognitive Services)
+Pricing Tier    : Standard S0
+Endpoint Format : https://<name>.cognitiveservices.azure.com/
+Authentication  : Dual API Keys (key1 / key2) & Microsoft Entra ID (RBAC)
+================================================================================
+
+1. WHAT IS "explore-ai-hub"? (THE BIG PICTURE)
+--------------------------------------------------------------------------------
+An Azure AI Multi-Service Account (resource kind: "AIServices", historically known 
+as "Cognitive Services") is Microsoft Azure's consolidated umbrella for pre-trained 
+enterprise machine learning APIs.
+
+Instead of provisioning 5+ separate cloud resources (one for Vision, one for 
+Speech, one for Translation, one for Document OCR, etc.), "explore-ai-hub" serves
+as a SINGLE CORPORATE GATEWAY that gives your applications:
+  - 1 unified HTTPS endpoint
+  - 1 set of dual API keys (key1 / key2)
+  - 1 consolidated monthly bill and budget item
+  - 1 centralized Role-Based Access Control (RBAC) security boundary
+
+--------------------------------------------------------------------------------
+2. ARCHITECTURAL COMPARISON: LEGACY VS. MODERN MULTI-SERVICE HUB
+--------------------------------------------------------------------------------
+[LEGACY FRAGMENTED ARCHITECTURE]
+Your Application ───► Vision Service       (Endpoint A, Key A, Invoice A)
+                 ───► Speech Service       (Endpoint B, Key B, Invoice B)
+                 ───► Language Service     (Endpoint C, Key C, Invoice C)
+                 ───► Doc Intelligence    (Endpoint D, Key D, Invoice D)
+
+[MODERN MULTI-SERVICE HUB: explore-ai-hub]
+Your Application ───► https://explore-ai-hub.cognitiveservices.azure.com/
+                            ├── Header: Ocp-Apim-Subscription-Key: <key1>
+                            └── Automatic Internal Routing:
+                                  ├── /computervision (Vision & OCR)
+                                  ├── /language (NLP, NER, Sentiment, PII)
+                                  ├── /speechservices (STT & TTS)
+                                  ├── /documentintelligence (PDFs & Invoices)
+                                  └── /contentsafety (LLM Guardrails)
+
+--------------------------------------------------------------------------------
+3. THE 6 PILLARS INSIDE YOUR MULTI-SERVICE HUB
+--------------------------------------------------------------------------------
+
+[PILLAR 1: Azure AI Document Intelligence (Highest FDE Priority)]
+* What It Does : Converts unstructured PDFs, scanned documents, and images
+                 into structured JSON, markdown, and tables.
+* Key Models   :
+    - Layout       : Extracts text reading order, headers, tables, checkboxes,
+                     and formatted Markdown (essential for RAG vector search).
+    - Invoices     : Detects VendorName, TotalAmount, Tax, DueDate, and line items.
+    - Receipts     : Extracts merchant, date, transaction subtotal, and tip.
+    - Identity     : Parses passports, driver's licenses, and national ID cards.
+* Web Studio   : https://documentintelligence.ai.azure.com
+
+[PILLAR 2: Azure AI Language]
+* What It Does : Natural language processing (NLP) on raw text.
+* Key Models   :
+    - PII Redaction: Automatically detects and masks credit card numbers, SSNs, 
+                     emails, and addresses before logging customer transcripts.
+    - NER          : Named Entity Recognition identifies people, places, and orgs.
+    - Sentiment    : Analyzes positive, negative, and neutral emotional valence.
+    - Summarization: Extractive and abstractive summarization of long docs.
+* Web Studio   : https://language.cognitive.azure.com
+
+[PILLAR 3: Azure AI Vision (Image Analysis 4.0)]
+* What It Does : Visual scene understanding and optical character recognition.
+* Key Models   :
+    - Read (OCR)   : Extracts embedded text from photos, signs, and labels.
+    - Captioning   : Generates complete human descriptions of uploaded scenes.
+    - Object Detect: Draws bounding boxes around detected items and people.
+    - Smart Crop   : Intelligently crops photos based on focal regions.
+* Web Studio   : https://portal.vision.cognitive.services.azure.com
+
+[PILLAR 4: Azure AI Speech]
+* What It Does : Voice transcription, synthetic voices, and audio translation.
+* Key Models   :
+    - Speech-to-Text (STT) : Real-time streaming transcription (Whisper support).
+    - Text-to-Speech (TTS) : 400+ neural voices with human inflection.
+    - Voice Avatars        : Generates photorealistic video avatars speaking text.
+* Web Studio   : https://speech.microsoft.com
+
+[PILLAR 5: Azure AI Content Safety & Decision]
+* What It Does : Guardrails and security filtering for Generative AI & LLMs.
+* Key Models   :
+    - Prompt Shield: Detects and blocks prompt injection and jailbreak attacks.
+    - Moderation   : Scans text/images for hate speech, violence, and adult content.
+* Web Studio   : https://contentsafety.cognitive.azure.com
+
+[PILLAR 6: Metrics Advisor]
+* What It Does : Automated time-series anomaly detection and diagnostic insights
+                 for enterprise operational KPIs (e.g. tracking sales drop-offs).
+
+--------------------------------------------------------------------------------
+4. ENTERPRISE AUTHENTICATION & ZERO-DOWNTIME KEY ROTATION
+--------------------------------------------------------------------------------
+Azure provides two API keys: "key1" and "key2".
+
+HOW PRODUCTION ROTATION WORKS WITHOUT DOWNTIME:
+1. Application initially points to "key1".
+2. When rotating security credentials, configure the application to use "key2".
+3. Verify that traffic continues uninterrupted.
+4. Execute key regeneration on "key1":
+     az cognitiveservices account keys regenerate `
+         --name "explore-ai-hub" `
+         --resource-group "rg-azure-explorer" `
+         --key-name key1
+5. Next cycle, repeat the process in reverse.
+
+PASSWORDLESS ENTERPRISE IDENTITY (Entra ID / RBAC):
+In high-security production deployments, hardcoded API keys are disabled.
+Applications authenticate using Azure Managed Identity:
+  - Role Assigned : "Cognitive Services User"
+  - SDK Code      : DefaultAzureCredential()
+
+--------------------------------------------------------------------------------
+5. HOW explore-ai-hub FITS INTO AN ENTERPRISE RAG PIPELINE
+--------------------------------------------------------------------------------
+In real-world Forward Deployed Engineering, explore-ai-hub acts as the sensory
+and preprocessing engine:
+
+[Raw Documents: PDFs, Invoices]
+       │
+       ▼
+[explore-ai-hub: Document Intelligence]
+  ├── Parses tables & converts PDF pages into markdown
+  └── Passes through Language service to redact customer PII
+       │
+       ▼
+[Azure AI Search (search-explorer-01)]
+  ├── Chunks markdown and stores dense vector embeddings
+  └── Performs Hybrid Search (BM25 Keyword + Vector + Semantic Ranker)
+       │
+       ▼
+[Azure AI Foundry (Phi-4 / Llama 3.3 / GPT-4o)]
+  └── Generates grounded, hallucination-free answers using retrieved chunks
+
+--------------------------------------------------------------------------------
+6. CLI COMMAND CHEAT SHEET FOR explore-ai-hub
+--------------------------------------------------------------------------------
+# Show status and endpoint
+az cognitiveservices account show `
+    --name "explore-ai-hub" `
+    --resource-group "rg-azure-explorer" `
+    --query "{Name:name, Status:properties.provisioningState, Endpoint:properties.endpoint, SKU:sku.name}" `
+    --output table
+
+# Retrieve API keys
+az cognitiveservices account keys list `
+    --name "explore-ai-hub" `
+    --resource-group "rg-azure-explorer" `
+    --output table
+
+# Check API call count / activity
+az monitor metrics list `
+    --resource (az cognitiveservices account show --name "explore-ai-hub" --resource-group "rg-azure-explorer" --query "id" -o tsv) `
+    --metric "TotalCalls" `
+    --output table
+
+--------------------------------------------------------------------------------
+7. SAMPLE TEST: CALLING THE LANGUAGE API VIA POWERSHELL
+--------------------------------------------------------------------------------
+$ENDPOINT = (az cognitiveservices account show --name "explore-ai-hub" --resource-group "rg-azure-explorer" --query "properties.endpoint" -o tsv)
+$KEY = (az cognitiveservices account keys list --name "explore-ai-hub" --resource-group "rg-azure-explorer" --query "key1" -o tsv)
+
+$payload = @{
+    kind = "SentimentAnalysis"
+    analysisInput = @{
+        documents = @(
+            @{ id = "1"; language = "en"; text = "Azure AI Services simplifies multi-modal enterprise workflows!" }
+        )
+    }
+} | ConvertTo-Json -Depth 5
+
+Invoke-RestMethod `
+    -Uri "$($ENDPOINT)language/:analyze-text?api-version=2023-04-01" `
+    -Method Post `
+    -Headers @{ "Ocp-Apim-Subscription-Key" = $KEY; "Content-Type" = "application/json" } `
+    -Body $payload | ConvertTo-Json -Depth 4
+================================================================================

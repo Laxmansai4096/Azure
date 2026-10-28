@@ -1,0 +1,278 @@
+================================================================================
+         AZURE AI SEARCH & FOUNDRY IQ: ENTERPRISE MASTER REFERENCE
+   (Complete End-to-End Guide for Forward Deployed & AI Engineers)
+================================================================================
+Target Service : Azure AI Search (search-explorer-01)
+Architecture   : Foundry IQ & Enterprise Vector Retrieval Engine
+Ecosystem      : Azure AI Foundry, Azure AI Services, Azure Blob Storage
+Pricing Tier   : Free (F) — 3 Indexes, 50 MB Vector & Document Storage
+Service URL    : https://search-explorer-01.search.windows.net
+================================================================================
+
+1. EXECUTIVE OVERVIEW: THE FOUNDRY IQ REVOLUTION
+--------------------------------------------------------------------------------
+Azure AI Search has evolved through four technological generations:
+
+  Generation 1: Keyword Search (BM25 algorithms, exact term matching)
+  Generation 2: Cognitive Search (AI Skillsets adding OCR, NER, and translation)
+  Generation 3: Vector & Hybrid Search (High-dimensional vector embeddings + HNSW)
+  Generation 4: Foundry IQ & Agentic Knowledge Retrieval (Current State)
+
+WHAT IS "FOUNDRY IQ"?
+Foundry IQ is the unified bridge between Azure AI Search (enterprise external 
+memory) and Azure AI Foundry (autonomous reasoning LLMs and agents). 
+
+Instead of treating a search index as a static database where an application 
+runs a single search query, Foundry IQ turns your enterprise data into an 
+"Agentic Knowledge Base". Autonomous AI agents can query, cross-examine, 
+decompose complex questions, and self-reflect across multiple knowledge sources.
+
+--------------------------------------------------------------------------------
+2. THE 4 PHYSICAL PILLARS OF AZURE AI SEARCH
+--------------------------------------------------------------------------------
+
+[PILLAR 1: INDEXES (The Database Schemas)]
+* What It Is : The physical table holding documents, metadata, and vectors.
+* Schema Elements:
+    - Key Field       : Unique document identifier (e.g. "id").
+    - Content Fields  : Text chunks with search analyzers (e.g. "chunk_text").
+    - Vector Fields   : High-dimensional float arrays (e.g. 1536 dimensions for 
+                        OpenAI text-embedding-3-small, 3072 for -large).
+    - Vector Profiles : Configuration specifying algorithm (HNSW or Exhaustive 
+                        K-NN) and metric (Cosine, Dot Product, Euclidean).
+    - Attributes      : Searchable (BM25), Filterable (SQL OData), Sortable, 
+                        Facetable, Retrievable.
+
+[PILLAR 2: DATA SOURCES (The Origin of Truth)]
+* What It Is : Secured pointers connecting AI Search to live data stores.
+* Supported Systems:
+    - Azure Blob Storage (PDFs, DOCX, TXT, Markdown, CSV, JSON)
+    - Azure Cosmos DB (NoSQL JSON document collections)
+    - Azure SQL Database / Managed Instances (Relational tables/views)
+    - Azure Data Lake Storage Gen2 (Enterprise analytical data lakes)
+* Change Tracking: Built-in high-watermark tracking detects updated/deleted 
+                   files and automatically syncs incremental changes.
+
+[PILLAR 3: SKILLSETS (The Ingestion AI Pipeline)]
+* What It Is : A visual Directed Acyclic Graph (DAG) of AI transformations 
+               executed as files are crawled.
+* Built-in Skills:
+    - Text Split Skill       : Chunks large PDFs into overlapping token windows.
+    - Azure OpenAI Embedding : Vectorizes text chunks into float arrays.
+    - Document OCR Skill     : Runs Document Intelligence on scanned photos.
+    - PII Redaction Skill    : Scrubs sensitive personal data prior to indexing.
+    - Key Phrase & NER Skill : Extracts entities (companies, dates, people).
+
+[PILLAR 4: INDEXERS (The Automated Crawler Workers)]
+* What It Is : The background engine that binds Data Source -> Skillset -> Index.
+* Function   : Runs on schedules (e.g., every 15 minutes, daily, or on-demand).
+               Handles document cracking (extracting text from raw PDF bytes),
+               feeding text through Skillsets, and writing vectors to the Index.
+
+--------------------------------------------------------------------------------
+3. ENTERPRISE OPERATIONAL CONTROLS: ALIASES & DEBUG SESSIONS
+--------------------------------------------------------------------------------
+
+[FEATURE 1: ALIASES (Blue/Green Zero-Downtime Deployment)]
+* Concept    : A permanent virtual alias (e.g., "kb-production") that points 
+               to an underlying physical index (e.g., "kb-v1-1536dim").
+* Enterprise Use Case:
+  Upgrading embedding models or altering chunk sizes requires re-indexing.
+  1. Build a new index: "kb-v2-3072dim".
+  2. Populate it via indexer without disturbing live production traffic.
+  3. Validate search quality on "kb-v2-3072dim".
+  4. Flip the alias pointer from v1 to v2 in a single API call.
+  5. Applications experience 0 seconds of downtime and require 0 code changes.
+
+[FEATURE 2: DEBUG SESSIONS (Visual IDE for Broken Ingestion)]
+* Concept    : A dedicated troubleshooting canvas for indexing failures.
+* Enterprise Use Case:
+  When an indexer crashes on page 4,200 of an encrypted corporate PDF:
+  1. Open a Debug Session and load the exact failing document.
+  2. Inspect intermediate data at every step of the DAG pipeline.
+  3. Edit skill JSON parameters (e.g., handle character limits or encoding).
+  4. Execute and test only the failing document in seconds.
+  5. Click "Save Changes" to update the live production skillset.
+
+--------------------------------------------------------------------------------
+4. FOUNDRY IQ: KNOWLEDGE BASES VS. KNOWLEDGE SOURCES
+--------------------------------------------------------------------------------
+
+[THE AGENTIC PARADIGM]
+Traditional RAG is passive:
+  User Query ──► Single Search Call ──► Top 3 Chunks ──► LLM ──► Answer
+
+Agentic Retrieval (Foundry IQ) is active and multi-step:
+  User Query ──► Autonomous AI Agent (Planner)
+                      │
+                      ├── Step 1: Formulate sub-query for Source A (Invoices)
+                      ├── Step 2: Extract invoice metadata (Vendor X, ID #123)
+                      ├── Step 3: Formulate sub-query for Source B (Contracts)
+                      ├── Step 4: Verify SLA terms against actual delivery date
+                      └── Step 5: Self-Reflection ("Are facts complete? Yes.")
+                      │
+                      ▼
+            Grounded Answer + Verifiable Citations
+
+[DEFINITIONS]
+* Knowledge Source : An individual data repository (e.g., a vectorized Azure AI 
+                     Search index, a SharePoint library, or an Azure SQL DB).
+* Knowledge Base   : The unified wrapper container that packages multiple 
+                     Knowledge Sources into a callable agent tool.
+
+--------------------------------------------------------------------------------
+5. THE 3 PORTAL CARDS DECONSTRUCTED
+--------------------------------------------------------------------------------
+
+1. "BUILD YOUR KNOWLEDGE BASE" (The End-to-End Agent Shortcut)
+   - Connects your data source.
+   - Vectorizes documents using Azure OpenAI or open-weights models.
+   - Automatically registers the index as an Agent Knowledge Base.
+   - Immediately launches the Azure AI Foundry Chat Playground to test answers.
+
+2. "CONNECT YOUR DATA" (The Core Ingestion Wizard)
+   - Focuses strictly on creating the Data Source, Skillset, Index, and Indexer.
+   - Used when you plan to write custom Python, C#, or REST API code rather 
+     than using the automated portal chat.
+
+3. "MONITOR AND SCALE" (Enterprise Capacity Management)
+   - Partitions: Scale out disk storage and document capacity.
+   - Replicas  : Scale out query read throughput (QPS) and enable high 
+                 availability SLAs across availability zones.
+   - Free Tier Note: Fixed at 1 Partition and 1 Replica ($0.00/month).
+
+--------------------------------------------------------------------------------
+6. RETRIEVAL ENGINE: HYBRID SEARCH + SEMANTIC RERANKER
+--------------------------------------------------------------------------------
+Azure AI Search achieves industry-leading retrieval accuracy by combining 
+three distinct layers into a single query pipeline:
+
+                   ┌──────────────────────────────────────┐
+                   │           INCOMING QUERY             │
+                   └──────────────────┬───────────────────┘
+                                      │
+              ┌───────────────────────┴───────────────────────┐
+              ▼                                               ▼
+    [1. BM25 Keyword Search]                      [2. Dense Vector Search]
+    Exact keyword matching,                       Captures semantic meaning,
+    acronyms, model numbers                       synonyms, and concepts
+              │                                               │
+              └───────────────────────┬───────────────────────┘
+                                      ▼
+                      [3. Reciprocal Rank Fusion (RRF)]
+                      Combines and normalizes scores
+                                      │
+                                      ▼
+                      [4. Microsoft Bing Semantic Ranker]
+                      Cross-encoder deep learning model
+                      re-ranks top 50 based on true intent
+                                      │
+                                      ▼
+                           FINAL TOP-RANKED RESULTS
+                           (@search.rerankerScore)
+
+--------------------------------------------------------------------------------
+7. SECURITY & ACCESS CONTROL PRIMITIVES
+--------------------------------------------------------------------------------
+
+[ADMIN KEYS VS. QUERY KEYS]
+* Admin Keys (Primary / Secondary):
+    - Full permissions (Create/Delete indexes, modify skillsets, read/write).
+    - NEVER expose these in client-side applications or frontend code.
+* Query Keys:
+    - Strictly Read-Only (Can only execute search queries against indexes).
+    - Safe for distributed client applications, mobile apps, or web search bars.
+
+[ZERO-TRUST IDENTITY (Microsoft Entra ID / RBAC)]
+In enterprise production, API keys can be disabled entirely in favor of RBAC:
+  - "Search Index Data Contributor" : Read + Write document permissions.
+  - "Search Index Data Reader"      : Read-only search permissions.
+  - "Search Service Contributor"    : Manage service infrastructure.
+
+--------------------------------------------------------------------------------
+8. HANDS-ON CODE EXAMPLES
+--------------------------------------------------------------------------------
+
+[PYTHON: EXECUTING HYBRID SEARCH + SEMANTIC RERANKING]
+```python
+from azure.identity import DefaultAzureCredential
+from azure.search.documents import SearchClient
+from azure.search.documents.models import VectorizedQuery
+
+endpoint = "https://search-explorer-01.search.windows.net"
+index_name = "enterprise-knowledge-index"
+
+client = SearchClient(
+    endpoint=endpoint,
+    index_name=index_name,
+    credential=DefaultAzureCredential()
+)
+
+# 1536-dimension vector embedding generated from your embedding model
+query_vector = [0.012, -0.045, 0.089, ...] 
+
+vector_query = VectorizedQuery(
+    vector=query_vector, 
+    k_nearest_neighbors=50, 
+    fields="content_vector"
+)
+
+results = client.search(
+    search_text="What are our customer reimbursement policies?",
+    vector_queries=[vector_query],
+    query_type="semantic",
+    semantic_configuration_name="my-semantic-config",
+    top=3
+)
+
+for doc in results:
+    print(f"Score: {doc['@search.rerankerScore']:.4f}")
+    print(f"Content: {doc['chunk_content'][:200]}...")
+    print(f"Source: {doc['source_file_name']}, Page: {doc['page_number']}\n")
+```
+
+[POWERSHELL: QUERYING AN INDEX DIRECTLY VIA REST API]
+```powershell
+$ENDPOINT = "https://search-explorer-01.search.windows.net"
+$ADMIN_KEY = (az search admin-key show --service-name "search-explorer-01" --resource-group "rg-azure-explorer" --query "primaryKey" -o tsv)
+
+$headers = @{
+    "api-key" = $ADMIN_KEY
+    "Content-Type" = "application/json"
+}
+
+# Inspect index statistics
+Invoke-RestMethod `
+    -Uri "$ENDPOINT/indexes?api-version=2024-07-01" `
+    -Method Get `
+    -Headers $headers | ConvertTo-Json -Depth 4
+```
+
+--------------------------------------------------------------------------------
+9. DIAGNOSTIC CLI REFERENCE
+--------------------------------------------------------------------------------
+# Show search service properties and endpoint
+az search service show `
+    --name "search-explorer-01" `
+    --resource-group "rg-azure-explorer" `
+    --output table
+
+# List primary and secondary admin keys
+az search admin-key show `
+    --service-name "search-explorer-01" `
+    --resource-group "rg-azure-explorer" `
+    --output table
+
+# Create a read-only query key for a client application
+az search query-key create `
+    --name "webapp-reader-key" `
+    --service-name "search-explorer-01" `
+    --resource-group "rg-azure-explorer" `
+    --output table
+
+# List all query keys
+az search query-key list `
+    --service-name "search-explorer-01" `
+    --resource-group "rg-azure-explorer" `
+    --output table
+================================================================================

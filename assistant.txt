@@ -1,0 +1,158 @@
+================================================================================
+   AZURE AI & FORWARD DEPLOYED ENGINEER (FDE) HANDS-ON PORTAL GUIDE
+   (100% Azure Web Portal & AI Studio GUI — Zero Terminal Commands)
+================================================================================
+Target Role     : AI Engineer / Forward Deployed Software Engineer (FDSE)
+Account Type    : Azure for Students ($100 Credits + Free Tier Services)
+Resource Group  : rg-azure-explorer (Central India)
+Portal URLs     : 
+  - Azure Main Portal           : https://portal.azure.com
+  - Azure AI Foundry (Studio)   : https://ai.azure.com
+  - Document Intelligence Studio: https://documentintelligence.ai.azure.com
+================================================================================
+
+HOW FORWARD DEPLOYED ENGINEERS ACTUALLY WORK:
+In enterprise AI deployments (at companies like Palantir, Microsoft, and OpenAI),
+engineers use the Azure Portal and AI Studios to:
+1. Benchmark and compare foundational models (GPT-4o, Llama 3, Phi-4, Mistral).
+2. Build Enterprise RAG (Retrieval-Augmented Generation) pipelines visually.
+3. Test document extraction on invoices, contracts, and PDFs.
+4. Evaluate prompt safety, hallucination metrics, and guardrails.
+5. Manage API keys, cost budgets, and enterprise role permissions.
+
+Follow these modules step-by-step in your browser!
+
+================================================================================
+MODULE 1: PROVISION THE ENTERPRISE AI MULTI-SERVICE HUB
+================================================================================
+WHAT THIS DOES:
+Creates an umbrella "Azure AI Services" resource that activates Vision, Speech,
+Language, OCR, and Document Intelligence under a single corporate endpoint.
+
+STEP-BY-STEP IN AZURE PORTAL:
+1. Open your browser and go to: https://portal.azure.com
+2. In the top search bar, type: "Azure AI services" (or "Cognitive Services").
+3. Click on "Azure AI services multi-service account" from the results.
+4. Click the blue "+ Create" button.
+5. Fill in the "Basics" tab:
+   - Subscription : "Azure for Students"
+   - Resource Group: Select your existing "rg-azure-explorer"
+   - Region        : Select "Central India" (or "East US")
+   - Name          : Enter a name (e.g., "ai-hub-explorer")
+   - Pricing tier  : Standard S0
+6. Review and Accept the Responsible AI terms checkbox.
+7. Click "Review + create" at the bottom, then click "Create".
+8. Wait ~60 seconds for deployment. Click "Go to resource".
+
+WHAT TO INSPECT LIKE A PRO:
+- In the left sidebar of your new resource, click "Keys and Endpoint".
+- Notice:
+  * "Endpoint": The base URL your client applications will call.
+  * "KEY 1" and "KEY 2": Dual keys for rotation without zero downtime.
+
+================================================================================
+MODULE 2: AZURE AI FOUNDRY (STUDIO) & MODEL CATALOG
+================================================================================
+WHAT THIS DOES:
+Azure AI Foundry (ai.azure.com) is the flagship workspace for AI Engineers.
+Here you test models in real-time, tweak system instructions, and prototype.
+
+STEP-BY-STEP IN BROWSER:
+1. Open: https://ai.azure.com (sign in with your student account).
+2. Look at the top left and select your directory/tenant:
+   Tenant: 841e991f-1730-433f-82ba-ea7895004ffa
+3. In the left navigation, click "Model catalog".
+4. Browse through the available enterprise models:
+   - Microsoft Phi-4 / Phi-3.5 (State-of-the-art small language models)
+   - Meta Llama 3.3 (70B open weight instruction model)
+   - Mistral Large & Codestral (Optimized for code generation)
+   - OpenAI Models (GPT-4o, GPT-4o-mini, text-embedding-3)
+5. Click on any model (e.g., "Phi-3.5-mini-instruct" or "Llama-3.3-70B").
+6. Click "Deploy" (Serverless API) or "Open in playground".
+7. In the Chat Playground:
+   - Set the "System message" (e.g., "You are an enterprise AI assistant for financial audit.").
+   - Adjust "Temperature" (0 for deterministic code, 0.7 for creative writing).
+   - Test prompting the model and watch the latency and token usage.
+
+================================================================================
+MODULE 3: ENTERPRISE RAG — AZURE AI SEARCH (VECTOR DATABASE)
+================================================================================
+WHAT THIS DOES:
+Retrieval-Augmented Generation (RAG) is the #1 project assigned to Forward
+Deployed Engineers. Azure AI Search indexes company data and performs
+hybrid search (BM25 keywords + vector embeddings + semantic ranking).
+
+STEP-BY-STEP IN AZURE PORTAL:
+1. Return to: https://portal.azure.com
+2. In the top search bar, type: "AI Search" and click on "Azure AI Search".
+3. Click "+ Create".
+4. Fill in the "Basics" tab:
+   - Subscription : "Azure for Students"
+   - Resource Group: "rg-azure-explorer"
+   - Service name  : Enter a unique name (e.g., "search-explorer-01")
+   - Location      : "Central India" (or same region as your RG)
+   - Pricing tier  : Click "Change Pricing Tier" -> Select "Free" (F)
+     *(Note: Every Azure subscription gets 1 permanently Free search service!)*
+5. Click "Review + create", then click "Create".
+6. When deployment finishes, click "Go to resource".
+
+PRO FDE FEATURE — "IMPORT AND VECTORIZE DATA" WIZARD:
+1. On the overview page of your Search service, look at the top toolbar.
+2. Notice the button: "Import and vectorize data".
+3. This single wizard connects a Blob storage container containing enterprise
+   PDFs, automatically chunks the text, runs an embedding model, and builds a
+   searchable vector index ready for chat!
+
+================================================================================
+MODULE 4: DOCUMENT INTELLIGENCE STUDIO (ENTERPRISE OCR)
+================================================================================
+WHAT THIS DOES:
+Enterprises have millions of scanned invoices, receipts, tax forms, and IDs.
+FDEs use Document Intelligence to transform unsearchable scans into clean JSON.
+
+STEP-BY-STEP IN BROWSER:
+1. Open: https://documentintelligence.ai.azure.com
+2. Click "Sign in" and connect your Azure AI Services resource from Module 1.
+3. Explore the pre-built AI models:
+   - "Read": Extracts printed and handwritten text.
+   - "Layout": Extracts tables, headers, and structural reading order.
+   - "Invoices & Receipts": Automatically extracts merchant, total, and tax.
+4. Click "Invoices" -> Select one of the sample invoices.
+5. Click "Run analysis".
+6. Look at the right panel:
+   - See how it detects "VendorName", "InvoiceTotal", "DueDate", and line items.
+   - Click "JSON" tab to see the structured output your code will consume.
+
+================================================================================
+MODULE 5: ENTERPRISE COST GOVERNANCE & CLEANUP
+================================================================================
+WHAT EVERY SENIOR ENGINEER DOES:
+Always set a cost alert and clean up unused resources to preserve student credits.
+
+STEP 5.1: Create a Budget Alert in Azure Portal
+1. Go to: https://portal.azure.com
+2. In the search bar, search for: "Cost Management + Billing".
+3. Click on your "Azure for Students" subscription.
+4. In the left menu under "Cost Management", click "Budgets".
+5. Click "+ Add":
+   - Name       : "Student-Credit-Safety-Alert"
+   - Reset period: Monthly
+   - Amount     : 20 (USD)
+   - Alert %    : 80% (triggers when spend hits $16)
+   - Email      : Your student email (23bcs061@iiitdmj.ac.in)
+6. Click "Create". Now you will receive an alert long before credits run low!
+
+STEP 5.2: Deleting the Resource Group When Finished
+When you are completely done exploring and want to clean up:
+1. Go to "Resource groups" -> Click "rg-azure-explorer".
+2. Click "Delete resource group" in the top bar.
+3. Type the resource group name to confirm, and click "Delete".
+4. Everything inside is wiped out cleanly in one click.
+
+================================================================================
+                         SUMMARY OF YOUR WORKSPACES
+================================================================================
+1. Azure Portal (General Cloud)     : https://portal.azure.com
+2. Azure AI Foundry (Models & LLMs) : https://ai.azure.com
+3. Document Intelligence (OCR/PDFs) : https://documentintelligence.ai.azure.com
+================================================================================
