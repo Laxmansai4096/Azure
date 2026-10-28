@@ -286,3 +286,4 @@ On `stexplore12`, this is set to `False`. This ensures that even if a junior dev
   * *Answer:* **PartitionKey** and **RowKey**.
 * **Q6: Why use SAS tokens instead of Account Keys?**
   * *Answer:* SAS tokens follow the Principle of Least Privilege: they restrict permissions, scope, IP address, and expire automatically.
+
